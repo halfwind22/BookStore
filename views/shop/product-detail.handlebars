@@ -1,0 +1,14 @@
+<main class="controller">
+    <h1>Product details</h1>
+    <hr>
+    <h1>{{prod.title}}</h1>
+    <hr>
+    <div>
+        <img src="{{prod.imageUrl}}" alt="{{prod.title}}">
+    </div>
+    <div>
+        <h2 class="product__price">Rs {{prod.price}}</h2>
+        <p class="product__description">{{prod.description}}</p>
+        {{> addtocart prod}}
+    </div>
+</main>
