@@ -101,7 +101,6 @@ module.exports.postCart = (req, res, next) => {
             }
         })
         .then(product => {
-            console.log('product',product);
             return fetchedCart.addProduct(product,{through: { quantity: qty }});
         })
         .then(() => {
