@@ -12,6 +12,12 @@ const errorrouter=require('./controllers/404');
 
 const app=express();
 
+const sequelize=require('./util/database');
+const Product=require('./models/Product');
+const User=require('./models/User');
+const Cart=require('./models/cart');
+const CartItem=require('./models/cart-item');
+
 app.engine('handlebars', exphbs({
     layoutsDir:'views/layouts/',
     defaultLayout:'main-layout'}));
@@ -22,7 +28,16 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname,'public')));
 
-//app.use(shoprouter);
+app.use((req,res,next)=>{
+    User.findByPk(1)
+    .then(user=>{
+        req.user=user;
+        next();
+    })
+    .catch(err=>{
+    console.log(err);
+    })
+})
 app.use('/admin', adminrouter.router);
 app.use(shoprouter);
 // app.use('/users',(req,res,next)=>{
@@ -45,4 +60,34 @@ app.use(shoprouter);
 //     res.send('<h1>Hello</h1>');
 // });
 app.use(errorrouter.pageNotFound);
-app.listen(3000);
+
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+
+
+sequelize.sync({force:true})
+.then(result=>{
+    console.log(result);
+    return User.findByPk(1);
+})
+.then(user=>{
+    if(!user)
+    {
+        return User.create({name:'Aravind',emailaddr:'aravindnk22@gmail.com'})
+    }
+    return user;
+})
+.then(user => {
+    // console.log(user);
+    return user.createCart();
+  })
+  .then(cart => {
+    app.listen(5000);
+  })
+.catch(err=>{
+    console.log(err);
+})

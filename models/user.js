@@ -3,14 +3,16 @@ const basepath = require('../util/path');
 const Sequelize=require('sequelize');
 const sequelize=require('../util/database');
 
-const Cart=sequelize.define('cart',
+const User=sequelize.define('user',
 {
     id:{
         type:Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
         primaryKey:true
-    }
+    },
+    name:Sequelize.STRING,
+    emailaddr:Sequelize.STRING
 });
 
-module.exports=Cart;
+module.exports=User;

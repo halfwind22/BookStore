@@ -5,14 +5,14 @@
         {{#each prod}}
         <article class="card product-item">
             <header class="card__header">
-                <h1 class="product__title">Itemname:{{this.productData.title}}</h1>
+                <h1 class="product__title">Itemname:{{this.title}}</h1>
             </header>
             <div class="card__content">
                 <h2 class="product__qty">QTY: {{this.qty}}</h2>
             </div>
             <div>
                 <form action="/cart-delete-item" method="POST">
-                    <input type="hidden" name="productId" value="{{this.productData.id}}">
+                    <input type="hidden" name="productId" value="{{this.id}}">
                     <button class="btn" type="submit">Delete</button>
                 </form>
             </div>
