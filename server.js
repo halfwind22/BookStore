@@ -12,11 +12,13 @@ const errorrouter=require('./controllers/404');
 
 const app=express();
 
-const sequelize=require('./util/database');
-const Product=require('./models/Product');
-const User=require('./models/User');
-const Cart=require('./models/cart');
-const CartItem=require('./models/cart-item');
+const sequelize = require('./util/database');
+const Product = require('./models/product');
+const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 app.engine('handlebars', exphbs({
     layoutsDir:'views/layouts/',
@@ -67,6 +69,11 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
+//Product.belongsToMany(Order, { through: OrderItem });
+
 
 
 sequelize.sync({force:true})
@@ -86,7 +93,7 @@ sequelize.sync({force:true})
     return user.createCart();
   })
   .then(cart => {
-    app.listen(5000);
+    app.listen(3000);
   })
 .catch(err=>{
     console.log(err);

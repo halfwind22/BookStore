@@ -1,1 +1,29 @@
-    <h1>Nothing here</h1>
+<main>
+    {{#if hasOrder}}
+    <h1>List of all the orders </h1>
+    <div class="grid">
+        {{#each order}}
+        <article class="card product-item">
+            <header class="card__header">
+                <h1 class="product__title">OrderId:{{this.id}}</h1>
+            </header>
+            <div class="card__content">
+                 {{#each products}}
+                <h2 class="product__title">Name: {{this.title}}</h2>
+                <h2 class="product__qty">QTY: {{this.orderItem.quantity}}</h2>
+                 {{/each}}
+            </div>
+            <div>
+                <form action="/cart-delete-item" method="POST">
+                    <input type="hidden" name="productId" value="{{this.id}}">
+                    <button class="btn" type="submit">Delete</button>
+                </form>
+            </div>
+        </article>
+        {{/each}}
+
+        <div>
+            {{else}}
+            <h1>No orders</h1>
+            {{/if}}
+</main>
